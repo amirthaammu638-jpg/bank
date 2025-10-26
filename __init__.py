@@ -15,6 +15,8 @@ def create_app():
     app.config['SECRET_KEY'] = 'supersecretkey123'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'smartbank.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB, adjust as needed
+
 
     # --- Init extensions ---
     db.init_app(app)

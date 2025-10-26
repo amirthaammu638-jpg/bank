@@ -1,8 +1,15 @@
+import base64
+from io import BytesIO
+import random
+from tkinter import Image
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_required, current_user
-from .models import User, Account, Transaction, db
+from flask_login import login_required, current_user, logout_user
+
+from .routes import get_face_encoding
+from .models import SavedContact, User, Account, Transaction, db
 import numpy as np
 from datetime import datetime
+from .forms import RegisterForm, DepositForm, WithdrawForm
 
 customer_bp = Blueprint("customer_bp", __name__)
 
@@ -29,7 +36,7 @@ def dashboard():
 def logout():
     logout_user()
     flash('Logged out successfully.', 'success')
-    return redirect(url_for('customer.login'))
+    return redirect(url_for('main.login'))
 
 
 # ---------------- REGISTER ----------------
@@ -78,7 +85,7 @@ def register():
         db.session.commit()
 
         flash("Registered successfully! Please login to continue.", "success")
-        return redirect(url_for('customer.login'))
+        return redirect(url_for('main.login'))
 
     return render_template("register.html", form=form)
 
@@ -248,4 +255,4 @@ def delete_account():
     db.session.commit()
     logout_user()
     flash("Your account has been deleted.", "success")
-    return redirect(url_for('customer.login'))
+    return redirect(url_for('main.login'))
