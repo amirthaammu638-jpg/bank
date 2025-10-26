@@ -37,7 +37,7 @@
     {% endwith %}
 
     <!-- Form -->
-    <form method="POST" action="{{ url_for('customer.emi_calculator') }}" class="space-y-5">
+    <form method="POST" action="{{ url_for('customer_bp.emi_calculator') }}" class="space-y-5">
       <div>
         <label for="principal" class="block text-sm font-medium text-gray-700">💰 Principal Amount (₹)</label>
         <input type="number" name="principal" id="principal" value="{{ principal or '' }}"

@@ -71,7 +71,7 @@
           {% if tx.id in reported_ids %}
             <span class="text-muted">Reported</span>
           {% else %}
-            <form method="POST" action="{{ url_for('customer.report_transaction', transaction_id=tx.id) }}">
+            <form method="POST" action="{{ url_for('customer_bp.report_transaction', transaction_id=tx.id) }}">
               <input type="text" name="reason" placeholder="Reason (optional)" class="form-control mb-1">
               <button type="submit" class="btn btn-danger btn-sm">Report</button>
             </form>

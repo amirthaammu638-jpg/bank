@@ -6,7 +6,7 @@
   <h2 class="mb-4">Transfer Money</h2>
 
   <!-- 🔁 Transfer Form -->
-  <form method="POST" action="{{ url_for('customer.transfer') }}">
+  <form method="POST" action="{{ url_for('customer_bp.transfer') }}">
     <div class="form-group">
       <label for="beneficiary_name">Beneficiary Name</label>
       <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name"
@@ -34,7 +34,7 @@
 
   <!-- 🔗 View Saved Contacts Page -->
   <div class="mt-4">
-    <a href="{{ url_for('customer.view_contacts') }}" class="btn btn-outline-secondary btn-sm">
+    <a href="{{ url_for('customer_bp.view_contacts') }}" class="btn btn-outline-secondary btn-sm">
       📇 View All Saved Contacts
     </a>
   </div>
@@ -50,7 +50,7 @@
         <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Profile" width="30" class="me-2">
         {{ contact.name }} ({{ contact.account_number }})
       </div>
-      <a href="{{ url_for('customer.transfer', name=contact.name, acc=contact.account_number) }}"
+      <a href="{{ url_for('customer_bp.transfer', name=contact.name, acc=contact.account_number) }}"
          class="btn btn-sm btn-outline-primary">Transfer</a>
     </li>
     {% endfor %}

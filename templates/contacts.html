@@ -15,7 +15,7 @@
                 <h5 class="card-title mb-1">{{ contact.name }}</h5>
                 <p class="card-text mb-1 text-muted">Account: {{ contact.account_number }}</p>
               </div>
-              <a href="{{ url_for('customer.transfer') }}?name={{ contact.name }}&acc={{ contact.account_number }}" class="btn btn-sm btn-primary">Transfer</a>
+              <a href="{{ url_for('customer_bp.transfer') }}?name={{ contact.name }}&acc={{ contact.account_number }}" class="btn btn-sm btn-primary">Transfer</a>
             </div>
           </div>
         </div>
