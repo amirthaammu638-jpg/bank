@@ -201,3 +201,41 @@ def create_key():
     else:
         flash("No key provided.", "danger")
     return redirect(url_for('staff.dashboard'))
+
+
+@staff_bp.route('/reports/<int:report_id>/delete', methods=['POST'])
+@staff_required
+def delete_report(report_id):
+    """Delete a report by id (POST)."""
+    report = SpamReport.query.get(report_id)
+    if not report:
+        flash('Report not found.', 'warning')
+        return redirect(url_for('staff.view_reports'))
+    try:
+        db.session.delete(report)
+        db.session.commit()
+        flash('Report deleted successfully.', 'success')
+    except Exception:
+        db.session.rollback()
+        flash('Failed to delete report.', 'danger')
+    return redirect(url_for('staff.view_reports'))
+
+
+@staff_bp.route('/reports/<int:report_id>/resolve', methods=['POST'])
+@staff_required
+def resolve_report(report_id):
+    """Mark a report as resolved (POST)."""
+    report = SpamReport.query.get(report_id)
+    if not report:
+        flash('Report not found.', 'warning')
+        return redirect(url_for('staff.view_reports'))
+    try:
+        report.status = 'Resolved'
+        # Optionally set a resolved_at timestamp if the model has one:
+        # report.resolved_at = datetime.utcnow()
+        db.session.commit()
+        flash('Report marked as resolved.', 'success')
+    except Exception:
+        db.session.rollback()
+        flash('Failed to update report.', 'danger')
+    return redirect(url_for('staff.view_reports'))
