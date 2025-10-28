@@ -250,6 +250,50 @@ def view_contacts():
     contacts = SavedContact.query.filter_by(user_id=current_user.id).all()
     return render_template("contacts.html", contacts=contacts)
 
+#---------------Report Transaction ----------------
+# ...existing code...
+from .models import SavedContact, User, Account, Transaction, db, SpamReport
+# ...existing code...
+
+@customer_bp.route('/report_transaction/<int:transaction_id>', methods=['POST'])
+@login_required
+def report_transaction(transaction_id: int):
+    """
+    Receive a report for a transaction (from templates/transactions.html),
+    create a SpamReport record and mark the transaction as reported.
+    """
+    reason = request.form.get('reason') or None
+    tx = Transaction.query.get_or_404(transaction_id)
+
+    # Prevent duplicate reports from same user / already-reported flag
+    if tx.reported:
+        flash("This transaction has already been reported.", "info")
+        return redirect(request.referrer or url_for('main.transactions'))
+
+    # Determine the reported_user (if possible)
+    reported_user_id = None
+    if tx.user_id and tx.user_id != current_user.id:
+        reported_user_id = tx.user_id
+    else:
+        # If the current user is the owner of the transaction, try to find the other party
+        if tx.recipient_account:
+            recipient_acc = Account.query.filter_by(account_number=tx.recipient_account).first()
+            if recipient_acc:
+                reported_user_id = recipient_acc.user_id
+
+    report = SpamReport(
+        user_id=current_user.id,
+        transaction_id=tx.id,
+        reported_user_id=reported_user_id,
+        reason=reason
+    )
+
+    tx.reported = True
+    db.session.add(report)
+    db.session.commit()
+
+    flash("Thank you. The transaction has been reported and will be reviewed by staff.", "success")
+    return redirect(url_for('main.transactions'))
 
 # ---------------- DELETE ACCOUNT ----------------
 @customer_bp.route('/delete_account', methods=['POST'])
