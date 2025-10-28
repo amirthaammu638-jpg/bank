@@ -25,9 +25,16 @@ def get_or_create_account(user):
 @login_required
 def dashboard():
     account = get_or_create_account(current_user)
-    balance = account.balance
-    account_number = account.account_number
-    return render_template("dashboard.html", balance=balance, account_number=account_number)
+    balance = account.balance if account else 0.0
+    account_number = account.account_number if account else None
+    goal_savings = sum(getattr(goal, "smart_saver_balance", 0) for goal in getattr(current_user, "goals", []))
+    usable_balance = balance - goal_savings
+    return render_template("dashboard.html",
+                           username = current_user.username,
+                           balance=balance, account_number=account_number,
+                           usable_balance=usable_balance,
+                           goal_savings = goal_savings 
+                           )
 
 
 # ---------------- LOGOUT ----------------
@@ -142,7 +149,7 @@ def deposit():
         account = current_user.account
         if not account:
             flash('No account found.', 'danger')
-            return redirect(url_for('customer.dashboard'))
+            return redirect(url_for('customer_bp.dashboardard'))
 
         if amount <= 0:
             flash('Please enter a valid positive amount.', 'danger')
@@ -153,7 +160,7 @@ def deposit():
         db.session.add(txn)
         db.session.commit()
         flash('Deposit successful! Your balance has been updated.', 'success')
-        return redirect(url_for('customer.dashboard'))
+        return redirect(url_for('customer_bp.dashboard'))
 
     return render_template('deposit.html', form=form)
 
@@ -168,7 +175,7 @@ def withdraw():
         account = current_user.account
         if not account:
             flash("Account not found.", "danger")
-            return redirect(url_for('customer.dashboard'))
+            return redirect(url_for('customer_bp.dashboard'))
 
         if amount <= 0 or amount > account.balance:
             flash("Invalid amount or insufficient funds.", "danger")
@@ -179,7 +186,7 @@ def withdraw():
         db.session.add(txn)
         db.session.commit()
         flash("Withdrawal successful!", "success")
-        return redirect(url_for('customer.dashboard'))
+        return redirect(url_for('customer_bp.dashboardard'))
 
     return render_template("withdraw.html", form=form)
 
@@ -229,10 +236,11 @@ def transfer():
 
             db.session.commit()
             flash("Transfer successful!", "success")
-            return redirect(url_for('customer.dashboard'))
+            return redirect(url_for('customer_bp.dashboard'))
 
     saved_contacts = SavedContact.query.filter_by(user_id=current_user.id).all()
     return render_template("transfer.html", saved_contacts=saved_contacts)
+
 
 
 # ---------------- VIEW CONTACTS ----------------

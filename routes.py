@@ -422,3 +422,15 @@ def withdraw_from_smart_saver(goal_id):
     process_transaction(current_user, "Smart Saver Withdrawal", amount, description=f"Withdrawn from goal '{goal.name}'")
     flash(f"₹{amount} withdrawn from Smart Saver.", "success")
     return redirect(url_for("main.view_goals"))
+
+# Route: Transaction History
+@main.route("/transactions")
+@login_required
+@nocache
+def transactions():
+    transactions = (
+        Transaction.query.filter_by(user_id=current_user.id)
+        .order_by(Transaction.id.desc())
+        .all()
+    )
+    return render_template("transactions.html", transactions=transactions)

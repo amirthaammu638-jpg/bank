@@ -27,20 +27,7 @@
             <div class="mb-3">{{ form.password.label(class="form-label") }}{{ form.password(class="form-control", placeholder="Enter password") }}{% if form.password.errors %}<div class="text-danger">{{ form.password.errors[0] }}</div>{% endif %}</div>
             <div class="mb-3">{{ form.confirm_password.label(class="form-label") }}{{ form.confirm_password(class="form-control", placeholder="Confirm password") }}{% if form.confirm_password.errors %}<div class="text-danger">{{ form.confirm_password.errors[0] }}</div>{% endif %}</div>
 
-            <div class="mb-3">
-                <label class="form-label">Face Capture</label>
-                <div class="d-flex gap-2 mb-2">
-                    <button type="button" onclick="startCamera()" class="btn btn-outline-info">Open Camera</button>
-                    <button type="button" onclick="captureFace()" class="btn btn-outline-success">Capture Face</button>
-                </div>
-                <input type="hidden" name="face_image" id="face_image">
-                <div id="video-container" style="position: relative; width: 100%; max-height: 300px;">
-    <video id="camera" autoplay muted playsinline style="display: none; width: 100%; border-radius: 10px;"></video>
-    <canvas id="overlay" style="position: absolute; top: 0; left: 0;"></canvas>
-</div>
-<img id="preview" alt="Captured Face Preview" style="display: none; width: 100%; border-radius: 8px;" />
 
-            </div>
 
             <div class="d-grid">
                 {{ form.submit(class="btn btn-primary") }}

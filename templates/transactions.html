@@ -43,7 +43,7 @@
     <tbody>
       {% for tx in transactions %}
       <tr>
-        <td>{{ "TNX" + tx.local_timestamp.strftime('%Y%m%d') + ("%04d"|format(tx.id)) }}</td>
+        <td>{{ "TNX" + tx.timestamp.strftime('%Y%m%d') + ("%04d"|format(tx.id)) }}</td>
         <td>{{ tx.type }}</td>
         <td>
           {% if tx.type.lower() in ['deposit', 'received'] %}
@@ -53,7 +53,7 @@
           {% endif %}
         </td>
         <td>{{ tx.recipient_account or '-' }}</td>
-        <td>{{ tx.local_timestamp.strftime('%Y-%m-%d %I:%M %p') if tx.local_timestamp else 'N/A' }}</td>
+        <td>{{ tx.timestamp.strftime('%Y-%m-%d %I:%M %p') if tx.timestamp else 'N/A' }}</td>
         <td>
           {% if tx.status %}
             {% if tx.status.lower() == 'success' %}

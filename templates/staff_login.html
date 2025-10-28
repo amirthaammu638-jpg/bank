@@ -53,7 +53,7 @@
         <div class="col-md-6 mb-4">
             <div class="card shadow-sm p-4">
                 <h4 class="mb-3 text-success">Login with Face ID</h4>
-                <form method="POST" action="{{ url_for('staff.face_login') }}" id="faceForm">
+                <form method="POST" action="{{ url_for('staff.login') }}" id="faceForm">
 
                     <input type="hidden" name="face_image" id="face_image">
                     <button type="button" class="btn btn-outline-success w-100" onclick="startFaceLogin()">Scan Face</button>
