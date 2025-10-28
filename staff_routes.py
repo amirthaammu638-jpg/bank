@@ -65,7 +65,7 @@ def staff_register():
             username=username,
             email=form.email.data,
             name=form.name.data,
-            mobile_number=form.mobile_number.data,
+            mobile_number=form.mobile.data,
             is_staff=True
         )
         new_user.set_password(form.password.data)
@@ -184,7 +184,7 @@ def view_customers():
 def view_user_transactions(user_id: int):
     user = User.query.get_or_404(user_id)
     transactions = Transaction.query.filter_by(user_id=user.id).all()
-    return render_template('staff_user_transactions.html', user=user, transactions=transactions)
+    return render_template('staff_user_transactions.html', page=1, pages=2, user=user, transactions=transactions)
 
 
 @staff_bp.route('/create_key', methods=['POST'])
